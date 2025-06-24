@@ -15,7 +15,7 @@ def get_test_dataset() -> list:
 
 def get_classifier() -> MLPClassifier:
     clf = MLPClassifier(
-        hidden_layer_sizes=(50,),
+        hidden_layer_sizes=(100, 75, 50,),
         solver='sgd',
         verbose=True
     )
@@ -36,7 +36,7 @@ def test(clf: MLPClassifier) -> list:
 def export_model(clf: MLPClassifier):
     import time
     timestamp = int(time.time())
-    joblib.dump(clf, f'clf_{timestamp}.pkl')
+    joblib.dump(clf, f'models/clf_{timestamp}.pkl')
 
 def import_model(name: str) -> MLPClassifier:
     model = joblib.load(name)
@@ -49,9 +49,11 @@ def create_submission(result: list):
         "ImageId": range(1, 28001),
         "Label": result
     })
-    df.to_csv(f'submission_{timestamp}.csv', index=False)
+    filename = f'submissions/submission_{timestamp}.csv'
+    df.to_csv(filename, index=False)
+    print(f'created new submission: {filename}')
 
 if __name__ == '__main__':
-    model = import_model('clf_1750776648.pkl')
-    result = test(model)
+    clf = train()
+    result = test(clf)
     create_submission(result)
