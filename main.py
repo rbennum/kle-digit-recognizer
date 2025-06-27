@@ -22,7 +22,8 @@ def get_classifier() -> MLPClassifier:
     clf = MLPClassifier(
         hidden_layer_sizes=(100, 75, 50,),
         solver='sgd',
-        verbose=True
+        verbose=True,
+        max_iter=500
     )
     return clf
 
